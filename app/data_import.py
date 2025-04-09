@@ -1,25 +1,25 @@
-import csv
-from app.database import SessionLocal
-from app.models import Lpu  # или нужную вам модель
+import pandas as pd
+import os
+import database
 
-def import_lpu_from_csv(file_path: str):
-    session = SessionLocal()
-    with open(file_path, mode='r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        # Преобразование строк CSV в словари, соответствующие полям модели
-        data = []
-        for row in reader:
-            print(row)
-            data.append({
-                "id": int(row["id"]),
-                "code_lpu": int(row["code_lpu"]),
-                "fullname": row["fullname"],
-                "lpu_name": row["lpu_name"],
-            })
-    # Для ускорения можно использовать bulk_insert_mappings
-    session.bulk_insert_mappings(Lpu, data)
-    session.commit()
-    session.close()
+# Подключение к БД в Docker
+DB_USER = os.getenv("POSTGRES_USER", "user")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "password")
+DB_NAME = os.getenv("POSTGRES_DB", "clinics")
+DB_HOST = os.getenv("DB_HOST", "clinics_db")  # Имя контейнера БД в Docker Compose
+DB_PORT = os.getenv("DB_PORT", "5432")
 
-if __name__ == "__main__":
-    import_lpu_from_csv("lpu.csv")
+DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+# Создаём подключение
+engine = database.engine
+
+for tablename in ['lpu', 'divisions', 'site']:
+    # Читаем CSV
+    csv_file = f"app/{tablename}.csv"
+    df = pd.read_csv(csv_file, delimiter=";")
+
+    # Записываем в таблицу
+    df.to_sql(tablename, con=engine, if_exists="append", index=False)
+
+    print(f"Данные успешно загружены в таблицу {tablename}.")
