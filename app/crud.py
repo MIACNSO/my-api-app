@@ -10,4 +10,6 @@ def get_divisions(db:Session):
 def get_sites(db:Session):
     return db.query(models.Site).all()
 
+def get_address(db:Session):
+    return db.query(models.Address).all()
 

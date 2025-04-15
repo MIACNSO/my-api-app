@@ -2,43 +2,57 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 class LpuOut(BaseModel):
-    id: int
-    code_lpu: int
-    fullname: str
-    name: str
+    lpu_id: Optional[int] = None
+    fullname: Optional[str] = None
+    shortname: Optional[str] = None
+    code: Optional[int] = None
 
     class Config:
         orm_mode = True
 
 class DivisionsOut(BaseModel):
-    id: int
-    lpu_id: int
-    phones: str
-    div_address: str
-    div_name: str
-    # При необходимости можно добавить вложенные объекты, например список сайтов:
+    div_id: Optional[str] = None
+    lpu_id: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    name: Optional[str] = None
     sites: Optional[List['SitesOut']] = None
 
     class Config:
         orm_mode = True
 
 class SitesOut(BaseModel):
-    id: int
-    division_id: int
-    rp_code: str
-    kladr_code: str
-    house_range_begin: int
-    house_range_end: int
-    house: str
-    houselit: str
-    block: int
-    building: str
-    house_range_begin_lit: str
-    house_range_end_lit: str
-    house_range_begin_block: int
-    house_range_end_block: int
-    house_even: int
-    house_numbs: str
+    site_id: Optional[int] = None
+    division_id: Optional[int] = None
+    kladr: Optional[str] = None
+    regpurpose: Optional[int] = None
+    house_range_begin: Optional[str] = None
+    house_range_end: Optional[str] = None
+    house: Optional[str] = None
+    house_lit: Optional[str] = None
+    block: Optional[str] = None
+    building: Optional[str] = None
+    house_range_begin_lit: Optional[str] = None
+    house_range_end_lit: Optional[str] = None
+    house_range_begin_block: Optional[str] = None
+    house_range_end_block: Optional[str] = None
+    house_even: Optional[str] = None
+    house_numbs: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class AddressOut(BaseModel):
+    aoid: Optional[str] = None
+    aoguid: Optional[str] = None
+    aolevel: Optional[int] = None
+    offname: Optional[str] = None
+    parentguid: Optional[str] = None
+    shortname: Optional[str] = None
+    plaincode: Optional[str] = None
+    fulladdress: Optional[str] = None
+    parentscount: Optional[int] = None
 
     class Config:
         orm_mode = True
