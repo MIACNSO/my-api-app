@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
 class LpuOut(BaseModel):
     lpu_id: Optional[int] = None
     fullname: Optional[str] = None
@@ -9,6 +10,8 @@ class LpuOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
 
 class DivisionsOut(BaseModel):
     div_id: Optional[str] = None
@@ -56,6 +59,13 @@ class AddressOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AddressResponse(AddressOut):
+    fulladdress: Optional[str] = None
+    class Config:
+        orm_mode = True
+
 
 # Если используются вложенные схемы, обновите ссылки:
 DivisionsOut.update_forward_refs()

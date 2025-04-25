@@ -10,6 +10,6 @@ def get_divisions(db:Session):
 def get_sites(db:Session):
     return db.query(models.Site).all()
 
-def get_address(db:Session):
-    return db.query(models.Address).all()
+def get_address_by_address(db:Session, fulladdress: str):
+    return db.query(models.Address).filter(models.Address.fulladdress.ilike(f"%{fulladdress}%")).all()
 
